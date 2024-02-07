@@ -29,11 +29,14 @@ do
       "cpu")
          sysbench cpu --cpu-max-prime=100000 --threads=$i run > ./bench/$mode/$virt/${mode}_$i.log ;;
       "mem")
-	 sysbench memory --memory-block-size=1K --memory-total-size=120G --threads=$i run > ./bench/$mode/$virt/${mode}_$i.log ;;
+	      sysbench memory --memory-block-size=1K --memory-total-size=120G --threads=$i run > ./bench/$mode/$virt/${mode}_$i.log ;;
       "disk")
          sysbench fileio --file-num=128 --file-block-size=4096 --file-total-size=120G --file-test-mode=rndrd --file-io-mode=sync --file-extra-flags=direct --threads=$i run > ./bench/$mode/$virt/${mode}_$i.log ;;
+      "net")
+	      iperf -c 127.0.0.1 -e -i 1 --nodelay -l 8192K --trip-times --parallel $i >> ./bench/$mode/$virt/${mode}_$i.log ;;
    esac
    echo -e "\tRan with $i threads."
+   sleep 1
 done
 
 
